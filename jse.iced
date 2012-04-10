@@ -1,5 +1,5 @@
 class JSEValue
-        constructor: (@optional,@title) ->
+        constructor: (@optional,@title,@fixed) ->
 
         setvalue: (value) ->
                 if @validate(value)
@@ -13,14 +13,17 @@ class JSEValue
         getvalue: -> @value
 
 class JSEString extends JSEValue
-        constructor: (optional,title) ->
-                super optional,title
+        constructor: (optional,title,fixed) ->
+                super optional,title,fixed
 
         render: (jselector) ->
                 jselector.append("<input type='text' class='input-xlarge' id='input01' placeholder='Enter something'>")
                 @el = jselector.find("input:last")
                 if @value?
                         @el.val( @value )
+                if @fixed
+                        @el.addClass("disabled")
+                        @el.attr("disabled","")
 
         validate: (obj) ->
                 if super(obj)
@@ -46,6 +49,8 @@ class JSEText extends JSEString
                 @el = jselector.find("textarea:last")
                 if @value?
                         @el.val( @value )
+                if @fixed
+                        @el.addClass("disabled")
 
 class JSEDate extends JSEString
 
@@ -55,11 +60,13 @@ class JSEDate extends JSEString
                 @el.datepicker({})
                 if @value?
                         @el.val( @value )
+                if @fixed
+                        @el.addClass("disabled")
 
 class JSESelect extends JSEString
 
         constructor: (optional,title,@options) ->
-                super optional,title
+                super optional,title,false
 
         render: (jselector) ->
                 jselector.append("<select></select>")
@@ -71,14 +78,16 @@ class JSESelect extends JSEString
                         @el.select( @value )
 
 class JSENumber extends JSEValue
-        constructor: (optional,title) ->
-                super optional,title
+        constructor: (optional,title,fixed) ->
+                super optional,title,fixed
 
         render: (jselector) ->
                 jselector.append("<input type='text' class='input-xlarge' id='input01' placeholder='Enter something'>")
                 @el = jselector.find("input:last")
                 if @value?
                         @el.val( @value )
+                if @fixed
+                        @el.addClass("disabled")
 
         validate: (obj) ->
                 if super(obj)
@@ -101,7 +110,7 @@ class JSENumber extends JSEValue
 class JSEObject extends JSEValue
         constructor: (fields,optional,title) ->
                 console.log("new object")
-                super optional,title
+                super optional,title,false
                 @children = {}
                 @fieldnames = (tuple.name for tuple in fields)
                 @children[ tuple.name ] = generateJSEItem( tuple.props ) for tuple in fields
@@ -143,7 +152,7 @@ class JSEObject extends JSEValue
 class JSEArray extends JSEValue
         constructor: (@fielddesc,optional,title) ->
                 console.log("new array")
-                super optional,title
+                super optional,title,false
                 @children = []
 
         render: (jselector) ->
@@ -184,19 +193,19 @@ generateJSEItem = ( fielddesc ) ->
         eltype = fielddesc["eltype"]
         title = fielddesc["title"]
         options = fielddesc["options"]
+        fixed = fielddesc["fixed"]
         console.log("type: #{type}")
         switch type
                 when "obj" then new JSEObject(children,optional,title)
-                when "num" then new JSENumber(optional,title)
-                when "str" then new JSEString(optional,title)
+                when "num" then new JSENumber(optional,title,fixed)
+                when "str" then new JSEString(optional,title,fixed)
                 when "select" then new JSESelect(optional,title,options)
-                when "text" then new JSEText(optional,title)
-                when "date" then new JSEDate(optional,title)
+                when "text" then new JSEText(optional,title,fixed)
+                when "date" then new JSEDate(optional,title,fixed)
                 when "arr" then new JSEArray(eltype,optional,title)
                 else throw "JSE: unknown type #{type}"
 
 class JSE
-
       constructor: (@selector,@scheme) ->
                            @jse = generateJSEItem( @scheme )
                            @jse.render(@selector)
