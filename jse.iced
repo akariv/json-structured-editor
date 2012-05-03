@@ -7,7 +7,7 @@ class JSEValue
 
         validate: (value) ->
                 if !(@optional or value?)
-                        throw "JSE: Required mandatory value"
+                        throw "JSE: #{@title} Required mandatory value"
                 return value? and value != 'undefined'
 
         getvalue: -> @value
@@ -92,7 +92,7 @@ class JSENumber extends JSEValue
         validate: (obj) ->
                 if super(obj)
                         unless (typeof(obj) == "number")
-                                throw "JSE: Expected Number value"
+                                throw "JSE: #{@title} Expected Number value"
                         else
                                 return true
                 return false
@@ -105,6 +105,31 @@ class JSENumber extends JSEValue
                                 null
                 else
                         @value
+
+
+class JSEBoolean extends JSEValue
+        constructor: (optional,title,fixed) ->
+                super false,title,fixed
+
+        render: (jselector) ->
+                jselector.append("<input type='checkbox' class='input-xlarge' id='input01'>")
+                @el = jselector.find("input:last")
+                if @value?
+                        @el.val( @value )
+                if @fixed
+                        @el.addClass("disabled")
+
+        validate: (obj) ->
+                if super(obj)
+                        unless (typeof(obj) == "boolean")
+                                throw "JSE: #{@title} Expected Boolean value"
+                        else
+                                return true
+                return false
+
+        getvalue: ->
+                if @el
+                        @el.val()
 
 
 class JSEObject extends JSEValue
@@ -198,6 +223,7 @@ generateJSEItem = ( fielddesc ) ->
         switch type
                 when "obj" then new JSEObject(children,optional,title)
                 when "num" then new JSENumber(optional,title,fixed)
+                when "bool" then new JSEBoolean(optional,title,fixed)
                 when "str" then new JSEString(optional,title,fixed)
                 when "select" then new JSESelect(optional,title,options)
                 when "text" then new JSEText(optional,title,fixed)
