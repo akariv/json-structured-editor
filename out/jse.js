@@ -181,7 +181,7 @@
         val = option[0], display = option[1];
         this.el.append("<option value='" + val + "'>" + display + "</option>");
       }
-      if (this.value != null) return this.el.select(this.value);
+      if (this.value != null) return $(this.el).val(this.value);
     };
 
     return JSESelect;
@@ -239,13 +239,13 @@
     JSEBoolean.name = 'JSEBoolean';
 
     function JSEBoolean(optional, title, fixed) {
-      JSEBoolean.__super__.constructor.call(this, false, title, fixed);
+      JSEBoolean.__super__.constructor.call(this, optional, title, fixed);
     }
 
     JSEBoolean.prototype.render = function(jselector) {
       jselector.append("<input type='checkbox' class='input-xlarge' id='input01'>");
       this.el = jselector.find("input:last");
-      if (this.value != null) this.el.val(this.value);
+      if (this.value != null) $(this.el).prop('checked', this.value);
       if (this.fixed) return this.el.addClass("disabled");
     };
 

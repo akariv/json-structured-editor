@@ -75,7 +75,7 @@ class JSESelect extends JSEString
                         [ val, display ] = option
                         @el.append("<option value='#{val}'>#{display}</option>")
                 if @value?
-                        @el.select( @value )
+                        $(@el).val( @value )
 
 class JSENumber extends JSEValue
         constructor: (optional,title,fixed) ->
@@ -109,13 +109,13 @@ class JSENumber extends JSEValue
 
 class JSEBoolean extends JSEValue
         constructor: (optional,title,fixed) ->
-                super false,title,fixed
+                super optional,title,fixed
 
         render: (jselector) ->
                 jselector.append("<input type='checkbox' class='input-xlarge' id='input01'>")
                 @el = jselector.find("input:last")
                 if @value?
-                        @el.val( @value )
+                        $(@el).prop('checked', @value )
                 if @fixed
                         @el.addClass("disabled")
 
