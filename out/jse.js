@@ -149,7 +149,7 @@
     }
 
     JSEDate.prototype.render = function(jselector) {
-      jselector.append("<input data-date-format='dd/mm/yyyy' value='01/01/2012' type='text' class='input-xlarge'>");
+      jselector.append("<input data-date-format='yyyy/mm/dd' value='2012/01/01' type='text' class='input-xlarge'>");
       this.el = jselector.find("input:last");
       this.el.datepicker({});
       if (this.value != null) this.el.val(this.value);

@@ -55,7 +55,7 @@ class JSEText extends JSEString
 class JSEDate extends JSEString
 
         render: (jselector) ->
-                jselector.append("<input data-date-format='dd/mm/yyyy' value='01/01/2012' type='text' class='input-xlarge'>")
+                jselector.append("<input data-date-format='yyyy/mm/dd' value='2012/01/01' type='text' class='input-xlarge'>")
                 @el = jselector.find("input:last")
                 @el.datepicker({})
                 if @value?
