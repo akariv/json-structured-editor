@@ -261,7 +261,7 @@
     };
 
     JSEBoolean.prototype.getvalue = function() {
-      if (this.el) return this.el.val() === "on";
+      if (this.el) return $(this.el).is(':checked');
     };
 
     return JSEBoolean;
