@@ -129,7 +129,7 @@ class JSEBoolean extends JSEValue
 
         getvalue: ->
                 if @el
-                        @el.val()
+                        @el.val() == "on"
 
 
 class JSEObject extends JSEValue

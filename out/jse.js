@@ -261,7 +261,7 @@
     };
 
     JSEBoolean.prototype.getvalue = function() {
-      if (this.el) return this.el.val();
+      if (this.el) return this.el.val() === "on";
     };
 
     return JSEBoolean;
