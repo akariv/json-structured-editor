@@ -129,7 +129,8 @@ class JSEBoolean extends JSEValue
 
         getvalue: ->
                 if @el
-                        @el.val() == "on"
+                        $(@el).is(':checked')
+
 
 
 class JSEObject extends JSEValue
